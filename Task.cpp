@@ -35,7 +35,7 @@ Task::Task (uint8_t _endpoint, const char *_name, enum LOG_LEVEL _log_level)
 }
 
 void
-Task::request_process (unsigned delayms)
+Task::request_process (uint32_t delayms)
 {
     taskman->request_process(this, delayms);
 }

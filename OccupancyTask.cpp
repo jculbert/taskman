@@ -1,3 +1,5 @@
+#ifdef OCCUPANCY
+
 #include "em_gpio.h"
 #include "gpiointerrupt.h"
 
@@ -83,3 +85,5 @@ void OccupancyTask::update_occupancy(bool _occupancy)
         &occupancy, ZCL_BITMAP8_ATTRIBUTE_TYPE);
     log_debug("update_occupancy result=%d, state=%d", result, occupancy);
 }
+
+#endif

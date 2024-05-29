@@ -19,7 +19,7 @@ public:
 
   void add_task(Task *task);
 
-  void request_process(Task *task, unsigned delayms);
+  void request_process(Task *task, uint32_t delayms);
 
   void process();
 

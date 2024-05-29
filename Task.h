@@ -37,7 +37,7 @@ public:
 
   Task (uint8_t endpoint, const char * name, enum LOG_LEVEL log_level);
 
-  void request_process(unsigned delayms);
+  void request_process(uint32_t delayms);
 
   virtual void process() = 0;
 

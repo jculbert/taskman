@@ -44,7 +44,7 @@ void TaskMan::add_task(Task *task)
     tasks.push_front(task);
 }
 
-void TaskMan::request_process(Task *task, unsigned delayms)
+void TaskMan::request_process(Task *task, uint32_t delayms)
 {
     if (delayms == 0)
     {
