@@ -1,6 +1,6 @@
 #include "AppConfig.h"
 
-#ifdef EXCELITAS_OCCUPANCY
+#ifdef EXCELITAS_OCCUPANCY_TASK
 
 #include "em_gpio.h"
 #include "gpiointerrupt.h"

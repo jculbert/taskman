@@ -1,4 +1,6 @@
-#ifdef OCCUPANCY
+#include "AppConfig.h"
+
+#ifdef OCCUPANCY_TASK
 
 #include "em_gpio.h"
 #include "gpiointerrupt.h"
