@@ -23,7 +23,7 @@ extern "C" void battery_task_init(uint8_t endpoint, uint32_t nominal_mv, uint32_
     new BatteryTask(endpoint, BatteryTask::LOG_DEBUG, nominal_mv, refresh_minutes);
 }
 
-void iadc_irqhandler(void)
+void IADC_IRQHandler(void)
 {
   // Read a result from the FIFO
   IADC_Result_t sample = IADC_pullSingleFifoResult(IADC0);
