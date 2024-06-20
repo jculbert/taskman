@@ -33,7 +33,7 @@ static WindTask *task;
 
 extern "C" void wind_task_init(uint8_t endpoint)
 {
-    new WindTask(endpoint, WindTask::LOG_DEBUG);
+    new WindTask(endpoint, WindTask::LOG_INFO);
 }
 
 /***************************************************************************//**
@@ -121,7 +121,7 @@ static void init_prs(void)
 }
 
 WindTask::WindTask(uint8_t endpoint, enum LOG_LEVEL log_level)
-  : Task(endpoint, "Battery", log_level), pulse_cnt_start(0), pulse_cnt(0), pulse_cnt_max_delta(0),
+  : Task(endpoint, "Weather", log_level), pulse_cnt_start(0), pulse_cnt(0), pulse_cnt_max_delta(0),
     num_samples(0), wind(0), gust(0)
 {
     task = this;
@@ -158,7 +158,16 @@ void WindTask::process_wind_data()
         if (gust < gustHistory[i])
             gust = gustHistory[i];
     }
-    //chip::DeviceLayer::PlatformMgr().ScheduleWork(UpdateClusterState, reinterpret_cast<intptr_t>(nullptr));
+
+    //static uint16_t delta = 0;
+    //wind = 6 + delta;
+    //gust = 22 + 2*delta;
+    //delta++;
+
+    uint16_t muxed = ((wind << 8) + gust) * 10; // HA value will be divided by 10
+    EmberAfStatus result = emberAfWriteServerAttribute(endpoint, ZCL_FLOW_MEASUREMENT_CLUSTER_ID, ZCL_FLOW_MEASURED_VALUE_ATTRIBUTE_ID,
+        (uint8_t *) &muxed, ZCL_INT16U_ATTRIBUTE_TYPE);
+    log_info("update_wind result=%d, muxed=%d", result, muxed);
 }
 
 void WindTask::process()
