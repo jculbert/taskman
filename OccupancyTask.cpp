@@ -9,6 +9,7 @@
 
 extern "C" {
 #include "app/framework/util/attribute-table.h"
+#include "app/framework/plugin/reporting/reporting.h"
 }
 
 #include "OccupancyTask.h"
@@ -40,6 +41,25 @@ OccupancyTask::OccupancyTask(uint8_t endpoint, enum LOG_LEVEL log_level, uint32_
 void OccupancyTask::process()
 {
     log_debug("process");
+
+    // Override min report interval if not set to 0
+    // Zigbee2mqtt sets it to 10
+    EmberAfPluginReportingEntry entry;
+    for(int i = 0; i < REPORT_TABLE_SIZE; i++){
+        sli_zigbee_af_reporting_get_entry(i, &entry);
+        if(entry.endpoint == endpoint && entry.clusterId == ZCL_OCCUPANCY_SENSING_CLUSTER_ID)
+        {
+            //log_debug("r %d %d", entry.attributeId, entry.data.reported.minInterval);
+            if (entry.data.reported.minInterval != 0)
+            {
+                log_debug("updating rep int to 0");
+                entry.data.reported.minInterval = 0;
+                sli_zigbee_af_reporting_set_entry(i, &entry);
+            }
+
+            break;
+        }
+    }
 
     if (interrupt)
     {
