@@ -13,6 +13,7 @@
 
 extern "C" {
 #include "app/framework/util/attribute-table.h"
+#include "app/framework/plugin/reporting/reporting.h"
 }
 
 static ContactTask *task;
@@ -74,8 +75,28 @@ ContactTask::ContactTask(uint8_t endpoint, enum LOG_LEVEL log_level)
 void ContactTask::process()
 {
     log_debug("process");
+
+    // Override min report interval if not set to 1
+    // Zigbee2mqtt sets it to 10
+    EmberAfPluginReportingEntry entry;
+    for(int i = 0; i < REPORT_TABLE_SIZE; i++){
+        sli_zigbee_af_reporting_get_entry(i, &entry);
+        if(entry.endpoint == endpoint && entry.clusterId == ZCL_OCCUPANCY_SENSING_CLUSTER_ID)
+        {
+            //log_debug("r %d %d", entry.attributeId, entry.data.reported.minInterval);
+            if (entry.data.reported.minInterval != 1)
+            {
+                log_debug("updating rep int to 1");
+                entry.data.reported.minInterval = 1;
+                sli_zigbee_af_reporting_set_entry(i, &entry);
+            }
+
+            break;
+        }
+    }
+
     state = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_HALL_INPUT_PORT, SL_EMLIB_GPIO_INIT_HALL_INPUT_PIN) == 0 ? false: true;
-    uint8_t _state = state ? 0: 1;
+    uint8_t _state = state ? 1: 0;
     EmberAfStatus result = emberAfWriteServerAttribute(endpoint, ZCL_OCCUPANCY_SENSING_CLUSTER_ID, ZCL_OCCUPANCY_ATTRIBUTE_ID,
         &_state, ZCL_BITMAP8_ATTRIBUTE_TYPE);
     log_debug("update state result=%d, state=%d", result, state);
