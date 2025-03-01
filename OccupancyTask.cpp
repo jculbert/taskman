@@ -44,7 +44,7 @@ void OccupancyTask::process()
 
     // Override min report interval if not set to 0
     // Zigbee2mqtt sets it to 10
-    EmberAfPluginReportingEntry entry;
+    sl_zigbee_af_plugin_reporting_entry_t entry;
     for(int i = 0; i < REPORT_TABLE_SIZE; i++){
         sli_zigbee_af_reporting_get_entry(i, &entry);
         if(entry.endpoint == endpoint && entry.clusterId == ZCL_OCCUPANCY_SENSING_CLUSTER_ID)
@@ -103,7 +103,7 @@ void OccupancyTask::process()
 void OccupancyTask::update_occupancy(bool _occupancy)
 {
     occupancy = _occupancy ? 1: 0;
-    EmberAfStatus result = emberAfWriteServerAttribute(endpoint, ZCL_OCCUPANCY_SENSING_CLUSTER_ID, ZCL_OCCUPANCY_ATTRIBUTE_ID,
+    sl_zigbee_af_status_t result = sl_zigbee_af_write_server_attribute(endpoint, ZCL_OCCUPANCY_SENSING_CLUSTER_ID, ZCL_OCCUPANCY_ATTRIBUTE_ID,
         &occupancy, ZCL_BITMAP8_ATTRIBUTE_TYPE);
     log_debug("update_occupancy result=%d, state=%d", result, occupancy);
 }

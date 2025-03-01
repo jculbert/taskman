@@ -23,7 +23,7 @@ public:
 
   void process();
 
-  void event_handler(sl_zigbee_event_t *event);
+  void event_handler(sli_zigbee_event_t *event);
 };
 
 #endif /* TASKMAN_H_ */

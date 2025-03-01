@@ -33,7 +33,7 @@ public:
   enum LOG_LEVEL {LOG_CRIT, LOG_INFO, LOG_DEBUG} log_level;
   TaskMan *taskman;
   bool needs_process;
-  sl_zigbee_event_t event;
+  sli_zigbee_event_t event;
 
   Task (uint8_t endpoint, const char * name, enum LOG_LEVEL log_level);
 

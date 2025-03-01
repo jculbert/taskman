@@ -149,7 +149,7 @@ void BatteryTask::process()
         if (battery_percent > 200)
             battery_percent = 200;
 
-        EmberAfStatus result = emberAfWriteServerAttribute(endpoint, ZCL_POWER_CONFIG_CLUSTER_ID, ZCL_BATTERY_PERCENTAGE_REMAINING_ATTRIBUTE_ID,
+        sl_zigbee_af_status_t result = sl_zigbee_af_write_server_attribute(endpoint, ZCL_POWER_CONFIG_CLUSTER_ID, ZCL_BATTERY_PERCENTAGE_REMAINING_ATTRIBUTE_ID,
             &battery_percent, ZCL_INT8U_ATTRIBUTE_TYPE);
         log_debug("update state result=%d, battery_pecent=%d", result, battery_percent);
 
